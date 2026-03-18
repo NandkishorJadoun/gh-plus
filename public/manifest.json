@@ -1,8 +1,15 @@
 {
     "manifest_version": 3,
     "name": "gh-plus",
-    "version": "1.0",
-    "description": "",
+    "version": "1.1",
+    "description": "Enhance GitHub PR page",
+    "permissions": [
+        "storage"
+    ],
+    "host_permissions": [
+        "https://api.github.com/*"
+    ],
+    "options_page": "options.html",
     "content_scripts": [
         {
             "js": [
@@ -12,7 +19,7 @@
                 "main.css"
             ],
             "matches": [
-                "https://github.com/*/*/pulls"
+                "https://github.com/*/*/pulls*"
             ]
         }
     ]

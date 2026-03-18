@@ -16,10 +16,27 @@ function parsePullRequestUrl(url: string) {
 
 // Fetch PR data from GitHub API
 
+async function getGithubToken() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["githubToken"], (result) => {
+      resolve(result.githubToken || null);
+    });
+  });
+}
+
 async function fetchPullRequestData({ org, repo, pullNumber }: { org: string, repo: string, pullNumber: string }) {
   try {
+    const token = await getGithubToken();
+    
+    let headers;
+
+    if (token) {
+      headers = { Authorization: `Bearer ${token}` }
+    }
+
     const response = await fetch(
-      `${GITHUB_API}/${org}/${repo}/pulls/${pullNumber}`
+      `${GITHUB_API}/${org}/${repo}/pulls/${pullNumber}`,
+      { headers }
     );
 
     if (!response.ok) {

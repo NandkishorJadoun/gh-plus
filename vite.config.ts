@@ -9,6 +9,7 @@ export default defineConfig({
         rolldownOptions: {
             input: {
                 main: "src/main.ts",
+                options: "src/options.ts"
             },
             output: {
                 format: "es",
