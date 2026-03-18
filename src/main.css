@@ -1,0 +1,73 @@
+.div-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: sans-serif;
+  font-size: 14px;
+  color: #c9d1d9;
+  padding-left: 2.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.link {
+  color: #c9d1d9;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon {
+  vertical-align: text-bottom;
+  width: 16px;
+  height: 16px;
+}
+
+.badge {
+  background-color: #656c7633;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.changes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.additions {
+  color: #3fb950;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.deletions {
+  color: #f85149;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.blocks {
+  display: flex;
+  gap: 2px;
+}
+
+.block {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.block-green {
+  background-color: #238636;
+}
+
+.block-red {
+  background-color: #da3633;
+}
+
+.block-neutral {
+  background-color: #30363d;
+}
