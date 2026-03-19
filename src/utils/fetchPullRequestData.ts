@@ -1,8 +1,9 @@
 import { getGithubToken } from "./getGithubToken";
+import type { PrData } from "../types/PrData";
 
 export const GITHUB_API = "https://api.github.com/repos";
 
-export async function fetchPullRequestData({ org, repo, pullNumber }: { org: string, repo: string, pullNumber: string }) {
+export async function fetchPullRequestData({ org, repo, pullNumber }: PrData) {
     try {
         const token = await getGithubToken();
 
