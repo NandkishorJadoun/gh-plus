@@ -1,74 +1,21 @@
 import "./main.css";
-import { fetchPullRequestData } from "./utils/fetchPullRequestData";
-import { createElement } from "./utils/createElement";
+import { processCard } from "./utils/processCard";
 
-// Extract repo info from PR URL
-
-function parsePullRequestUrl(url: string) {
-  const parts = url.split("/");
-
-  if (parts.length < 5) return null;
-
-  const [, org, repo, , pullNumber] = parts;
-
-  return { org, repo, pullNumber };
-}
-
-async function processCard(card: Element) {
-  // prevent duplicate injection
-  if ((card as HTMLElement).dataset.processed === "true") return;
-
-  const linkElement = card.querySelector(`#${card.id}_link`);
-  const href = linkElement?.getAttribute("href");
-
-  if (!href) return;
-
-  const parsed = parsePullRequestUrl(href);
-  if (!parsed) return;
-
-  const data = await fetchPullRequestData(parsed);
-  if (!data) return;
-
-  const element = createElement(data, href);
-  card.appendChild(element);
-
-  (card as HTMLElement).dataset.processed = "true";
-}
-
-// Main entry
-
-async function main() {
-  const cards = document.querySelectorAll(".js-issue-row");
-
-  await Promise.all(
-    Array.from(cards).map(card => processCard(card))
-  );
-
-  observeNewCards(); 
-}
-
-main();
-
-
-function observeNewCards() {
-  const observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-      if (mutation.type !== "childList") continue;
-
-      mutation.addedNodes.forEach((node) => {
-        if (!(node instanceof HTMLElement)) return;
-
-        if (node.matches(".js-issue-row")) {
-          processCard(node);
-        }
-        const cards = node.querySelectorAll?.(".js-issue-row");
-        cards?.forEach((card) => processCard(card));
-      });
-    }
+function init() {
+  const observer = new MutationObserver(() => {
+    const cards = document.querySelectorAll(".js-issue-row:not([data-extension-processed='true'])");
+    cards.forEach(card => processCard(card as HTMLElement));
   });
 
-  observer.observe(document.body, {
+  const target = document.querySelector("#repo-content-turbo-frame") || document.body;
+
+  observer.observe(target, {
     childList: true,
-    subtree: true,
+    subtree: true
   });
+
+  const initialCards = document.querySelectorAll(".js-issue-row");
+  initialCards.forEach(card => processCard(card as HTMLElement));
 }
+
+init();

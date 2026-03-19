@@ -2,23 +2,26 @@ import { parsePullRequestUrl } from "./parsePullRequestUrl";
 import { fetchPullRequestData } from "./fetchPullRequestData";
 import { createElement } from "./createElement";
 
-export async function processCard(card: Element) {
-    // prevent duplicate injection
-    if ((card as HTMLElement).dataset.processed === "true") return;
+export async function processCard(card: HTMLElement) {
+  if (card.dataset.extensionProcessed === "true") return;
+  card.dataset.extensionProcessed = "true";
 
-    const linkElement = card.querySelector(`#${card.id}_link`);
-    const href = linkElement?.getAttribute("href");
+  const linkElement = card.querySelector("a.js-navigation-open");
+  const href = linkElement?.getAttribute("href");
 
-    if (!href) return;
+  if (!href) return;
 
-    const parsed = parsePullRequestUrl(href);
-    if (!parsed) return;
+  const parsed = parsePullRequestUrl(href);
+  if (!parsed) return;
 
+  try {
     const data = await fetchPullRequestData(parsed);
     if (!data) return;
 
     const element = createElement(data, href);
     card.appendChild(element);
-
-    (card as HTMLElement).dataset.processed = "true";
+  } catch (err) {
+    console.error("Failed to process PR card:", err);
+    delete card.dataset.extensionProcessed;
+  }
 }

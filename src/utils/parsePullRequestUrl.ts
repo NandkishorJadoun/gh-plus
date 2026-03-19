@@ -1,9 +1,11 @@
 export function parsePullRequestUrl(url: string) {
     const parts = url.split("/");
+    const pathSegments = parts.filter(Boolean);
 
-    if (parts.length < 5) return null;
+    if (pathSegments.length < 4) return null;
 
-    const [, org, repo, , pullNumber] = parts;
+    const [org, repo, type, pullNumber] = pathSegments;
+    if (type !== "pull") return null;
 
     return { org, repo, pullNumber };
 }
